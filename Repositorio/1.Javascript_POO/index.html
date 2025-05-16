@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestor de Personas</title>
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <header>
+       <h1>Gestor de Personas</h1>
+    </header>
+    <main>
+        <section class="section-container">
+            
+            <p>Bienvenido al gestor de personas</p>
+        </section>
+        
+        <section class="section-container">
+            <h2>Personas</h2>
+            
+            <div class="tabs">
+                <div class="tab active" data-tab="view-personas">Ver Personas</div>
+                <div class="tab" data-tab="create-persona">Crear Persona</div>
+                <div class="tab" data-tab="edit-persona">Editar Persona</div>
+            </div>
+            
+            <!-- Ver Personas -->
+            <div id="view-personas" class="tab-content active">
+                <table id="personas-table">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Género</th>
+                            <th>Cargo</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="personas-list">
+                        <!-- Aquí se mostrarán las personas dinámicamente -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Crear Persona -->
+            <div id="create-persona" class="tab-content">
+                <form id="persona-form">
+                    <div class="form-group">
+                        <label for="codigo">Código:</label>
+                        <input type="text" id="codigo" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="nombre">Nombre:</label>
+                        <input type="text" id="nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="apellido">Apellido:</label>
+                        <input type="text" id="apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="fechaNacimiento">Fecha de Nacimiento:</label>
+                        <input type="date" id="fechaNacimiento" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="genero">Género:</label>
+                        <select id="genero" required>
+                            <option value="">Seleccione...</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="cargo">Cargo:</label>
+                        <input type="text" id="cargo" required>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" id="save-persona">Guardar</button>
+                        <button type="reset">Limpiar</button>
+                    </div>
+                </form>
+            </div>
+            
+            <!-- Editar Persona -->
+            <div id="edit-persona" class="tab-content">
+                <div class="form-group">
+                    <label for="persona-select">Seleccionar Persona:</label>
+                    <select id="persona-select">
+                        <option value="">Seleccione una persona...</option>
+                        <!-- Opciones generadas dinámicamente -->
+                    </select>
+                </div>
+                <form id="edit-persona-form">
+                    <div class="form-group">
+                        <label for="edit-codigo">Código:</label>
+                        <input type="text" id="edit-codigo" readonly>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-nombre">Nombre:</label>
+                        <input type="text" id="edit-nombre" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-apellido">Apellido:</label>
+                        <input type="text" id="edit-apellido" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-fechaNacimiento">Fecha de Nacimiento:</label>
+                        <input type="date" id="edit-fechaNacimiento" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-genero">Género:</label>
+                        <select id="edit-genero" required>
+                            <option value="">Seleccione...</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                            <option value="Otro">Otro</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="edit-cargo">Cargo:</label>
+                        <input type="text" id="edit-cargo" required>
+                    </div>
+                    <div class="action-buttons">
+                        <button type="submit" id="update-persona">Actualizar</button>
+                        <button type="button" id="delete-persona">Eliminar</button>
+                    </div>
+                </form>
+            </div>
+        </section>
+        
+        <section class="section-container">
+            <h2>Proyectos</h2>
+            <p>Aquí puedes ver los proyectos</p>
+        </section>
+        
+        <section class="section-container">
+            <h2>Departamentos</h2>
+            <p>Aquí puedes ver los departamentos</p>
+        </section>
+    </main>
+    <footer>
+        <p>&copy; 2025 Sistema de Gestión</p>
+    </footer>
+    
+    <script src="js/persona.js"></script>
+    <script src="js/GestorPersonas.js"></script>
+    <script src="js/Departamento.js"></script>
+    <script src="js/Proyecto.js"></script>
+    <script src="js/control.js"></script>
+    
+    <script>
+        
+    </script>
+</body>
+</html>

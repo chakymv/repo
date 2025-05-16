@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="css/styles.css">
+    <title>Gestión de Departamentos</title>
+</head>
+<body>
+    <header>
+        <h1>Sistema de Gestión</h1>
+    </header>
+    <main>
+
+        <section class="section-container">
+            <h1>Gestor de Departamentos</h1>
+            <p>Bienvenido al gestor de departamentos</p>
+        </section>
+
+        <section class="departamentos-section">
+            <h2>Departamentos</h2>
+            <div class="departamentos-tabs">
+                <button class="tab active" data-tab="view-departamentos">Ver Departamentos</button>
+                <button class="tab" data-tab="add-departamento">Agregar Departamento</button>
+                <button class="tab" data-tab="edit-departamento">Editar Departamento</button>
+                <button class="tab" data-tab="manage-miembros">Gestionar Miembros</button>
+            </div>
+            <div class="departamentos-content">
+
+                <div id="view-departamentos" class="tab-content active">
+                    <h2>Departamentos</h2>
+                    <table id="departamentos-table">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Nombre</th>
+                                <th># Miembros</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="departamentos-list">
+                            </tbody>
+                    </table>
+                </div>
+
+                <div id="add-departamento" class="tab-content">
+                    <h2>Agregar Departamento</h2>
+                    <form id="departamento-form">
+                        <div>
+                            <label for="id-departamento">ID:</label>
+                            <input type="text" id="id-departamento" required>
+                        </div>
+                        <div>
+                            <label for="nombre-departamento">Nombre:</label>
+                            <input type="text" id="nombre-departamento" required>
+                        </div>
+                        <button type="submit">Guardar Departamento</button>
+                    </form>
+                </div>
+
+                <div id="edit-departamento" class="tab-content">
+                    <h2>Editar Departamento</h2>
+                    <form id="edit-departamento-form">
+                        <div>
+                            <label for="edit-id-departamento" class="readonly">ID:</label>
+                            <input type="text" id="edit-id-departamento" readonly>
+                        </div>
+                        <div>
+                            <label for="edit-nombre-departamento">Nombre:</label>
+                            <input type="text" id="edit-nombre-departamento" required>
+                        </div>
+                        <button type="submit">Guardar Cambios</button>
+                        <button type="button" id="delete-departamento">Eliminar Departamento</button>
+                    </form>
+                </div>
+
+                <div id="manage-miembros" class="tab-content">
+                    <h2>Gestionar Miembros del Departamento</h2>
+                    <div>
+                        <label for="departamento-select-miembros">Seleccionar Departamento:</label>
+                        <select id="departamento-select-miembros">
+                            <option value="">Seleccione un departamento...</option>
+                        </select>
+                    </div>
+
+                    <div id="miembros-gestion-area" style="display: none;">
+                        <h3>Miembros del Departamento: <span id="nombre-departamento-miembros"></span></h3>
+                        <ul id="miembros-list">
+                            </ul>
+
+                        <h3>Agregar Miembro:</h3>
+                        <div>
+                            <label for="persona-select-miembros">Seleccionar Persona:</label>
+                            <select id="persona-select-miembros">
+                                <option value="">Seleccione una persona...</option>
+                            </select>
+                            <button type="button" id="agregar-miembro-btn">Agregar Miembro</button>
+                        </div>
+
+                        <h3>Eliminar Miembro:</h3>
+                        <div>
+                            <label for="miembro-a-eliminar-select">Seleccionar Miembro a Eliminar:</label>
+                            <select id="miembro-a-eliminar-select">
+                                <option value="">Seleccione un miembro...</option>
+                            </select>
+                            <button type="button" id="eliminar-miembro-btn">Eliminar Miembro</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>&copy; 2025 Sistema de Gestión</p>
+    </footer>
+    <script src="js/Departamento.js" defer></script>
+    <script src="js/GestorDepartamentos.js" defer></script>
+    <script src="js/Persona.js" defer></script>
+    <script src="js/GestorPersonas.js" defer></script>
+    <script src="js/control.js" defer></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            setupTabs();
+            inicializarGestionDepartamentos();
+            // Si tienes inicialización para personas, llama a esa función aquí
+        });
+
+        function setupTabs() {
+            const allTabButtons = document.querySelectorAll('.tab[data-tab]');
+            allTabButtons.forEach(tabButton => {
+                tabButton.addEventListener('click', () => {
+                    const tabGroupContainer = tabButton.closest('.tabs, .departamentos-tabs, .proyectos-tabs');
+                    const targetContentId = tabButton.dataset.tab;
+                    const targetContent = document.getElementById(targetContentId);
+
+                    (tabGroupContainer || document).querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+
+                    tabButton.classList.add('active');
+                    if (targetContent) {
+                        targetContent.classList.add('active');
+                    }
+                });
+            });
+
+            const firstTab = document.querySelector('.tabs .tab.active, .departamentos-tabs .tab.active, .proyectos-tabs .tab.active, .tab[data-tab].active');
+            if (firstTab) {
+                const initialContentId = firstTab.dataset.tab;
+                const initialContent = document.getElementById(initialContentId);
+                if (initialContent) {
+                    initialContent.classList.add('active');
+                }
+            }
+        }
+    </script>
+</body>
+</html>
