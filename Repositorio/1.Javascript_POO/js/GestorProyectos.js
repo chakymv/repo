@@ -1,104 +1,109 @@
-class GestorDepartamentos {
-    #departamentos;
+// Clase GestorProyectos - Para manejar colecciones de proyectos
+class GestorProyectos {
+    #proyectos; // Colección de proyectos (Array)
 
     constructor() {
-        this.#departamentos = this.cargarDesdeLocalStorage();
+        this.#proyectos = []; // Inicializamos un array vacío
     }
 
-    agregarDepartamento(departamento) {
-        if (!(departamento instanceof Departamento)) {
-            console.error("Error: Se esperaba un objeto de tipo Departamento");
+    /**
+     * Agrega un proyecto a la colección
+     * @param {Proyecto} proyecto - Objeto de tipo Proyecto a agregar
+     * @returns {boolean} - Resultado de la operación
+     */
+    agregarProyecto(proyecto) {
+        // Verificamos que sea una instancia de Proyecto
+        if (!(proyecto instanceof Proyecto)) {
+            console.error("Error: Se esperaba un objeto de tipo Proyecto");
             return false;
         }
 
-        if (this.#departamentos.some(d => d.getId() === departamento.getId())) {
-            console.error(`El departamento con ID ${departamento.getId()} ya existe.`);
+        // Verificamos que no exista ya un proyecto con el mismo ID
+        if (this.buscarPorId(proyecto.getId())) {
+            console.error(`Error: Ya existe un proyecto con el ID ${proyecto.getId()}`);
             return false;
         }
 
-        this.#departamentos.push(departamento);
-        this.guardarEnLocalStorage();
+        // Agregamos el proyecto al array
+        this.#proyectos.push(proyecto);
         return true;
     }
 
-    obtenerTodos() {
-        return [...this.#departamentos];
-    }
-
-    buscarPorId(id) {
-        return this.#departamentos.find(departamento => departamento.getId() === id) || null;
-    }
-
-    actualizarDepartamento(id, nuevoNombre) {
-        const departamento = this.buscarPorId(id);
-        if (!departamento) {
-            console.error("Error: Departamento no encontrado.");
-            return false;
-        }
-
-        departamento.setNombre(nuevoNombre);
-        this.guardarEnLocalStorage();
-        return true;
-    }
-
-    eliminarDepartamento(id) {
-        const indice = this.#departamentos.findIndex(departamento => departamento.getId() === id);
+    /**
+     * Elimina un proyecto de la colección por su ID
+     * @param {string} id - ID del proyecto a eliminar
+     * @returns {boolean} - Resultado de la operación
+     */
+    eliminarProyecto(id) {
+        const indice = this.#proyectos.findIndex(p => p.getId() === id);
+        
         if (indice === -1) {
-            console.error("Error: Departamento no encontrado.");
+            console.error(`Error: No se encontró ningún proyecto con el ID ${id}`);
             return false;
         }
-
-        this.#departamentos.splice(indice, 1);
-        this.guardarEnLocalStorage();
+        
+        this.#proyectos.splice(indice, 1);
         return true;
     }
 
-    guardarEnLocalStorage() {
-        localStorage.setItem("departamentos", JSON.stringify(this.#departamentos.map(d => ({
-            id: d.getId(),
-            nombre: d.getNombre()
-            // No guardamos los miembros aquí; la relación se gestiona a través de Persona
-        }))));
+    /**
+     * Busca un proyecto por su ID
+     * @param {string} id - ID del proyecto a buscar
+     * @returns {Proyecto|null} - El proyecto encontrado o null
+     */
+    buscarPorId(id) {
+        return this.#proyectos.find(p => p.getId() === id) || null;
     }
 
-    cargarDesdeLocalStorage() {
-        const datos = localStorage.getItem("departamentos");
-        if (datos) {
-            try {
-                const departamentosParseados = JSON.parse(datos);
-                return departamentosParseados.map(d => new Departamento(d.id, d.nombre));
-            } catch (error) {
-                console.error("Error al cargar departamentos desde localStorage:", error);
-                return [];
-            }
-        }
-        return [];
+    /**
+     * Busca proyectos por su nombre (parcial o completo)
+     * @param {string} nombre - Nombre a buscar
+     * @returns {Array<Proyecto>} - Array con los proyectos que coinciden
+     */
+    buscarPorNombre(nombre) {
+        const nombreLower = nombre.toLowerCase();
+        return this.#proyectos.filter(p => 
+            p.getNombre().toLowerCase().includes(nombreLower)
+        );
     }
 
-    agregarMiembroADepartamento(departamentoId, persona) {
-        const departamento = this.buscarPorId(departamentoId);
-        if (!departamento) {
-            console.error(`Error: Departamento con ID ${departamentoId} no encontrado.`);
-            return false;
-        }
-        return departamento.agregarMiembro(persona);
+    /**
+     * Obtiene todos los proyectos de la colección
+     * @returns {Array<Proyecto>} - Copia del array de proyectos
+     */
+    obtenerTodos() {
+        return [...this.#proyectos]; // Devolvemos una copia para evitar modificaciones directas
     }
 
-    eliminarMiembroDeDepartamento(departamentoId, personaCodigo) {
-        const departamento = this.buscarPorId(departamentoId);
-        if (!departamento) {
-            console.error(`Error: Departamento con ID ${departamentoId} no encontrado.`);
-            return false;
-        }
-        return departamento.eliminarMiembro(personaCodigo);
+    /**
+     * Cuenta el número de proyectos en la colección
+     * @returns {number} - Cantidad de proyectos
+     */
+    contarProyectos() {
+        return this.#proyectos.length;
     }
 
-    obtenerMiembrosDeDepartamento(departamentoId) {
-        const departamento = this.buscarPorId(departamentoId);
-        if (!departamento) {
-            console.error(`Error: Departamento con ID ${departamentoId} no encontrado.`);
-            return [];
-        }
-        return departamento.getMiembros();
+    /**
+     * Busca proyectos en los que participa una persona específica
+     * @param {string} codigoPersona - Código de la persona
+     * @returns {Array<Proyecto>} - Proyectos en los que participa la persona
+     */
+    buscarProyectosPorParticipante(codigoPersona) {
+        return this.#proyectos.filter(proyecto => {
+            const participantes = proyecto.getParticipantes();
+            return participantes.some(p => p.persona.getCodigo() === codigoPersona);
+        });
+    }
+
+    /**
+     * Busca proyectos activos (sin fecha de fin o con fecha de fin posterior a hoy)
+     * @returns {Array<Proyecto>} - Proyectos activos
+     */
+    obtenerProyectosActivos() {
+        const hoy = new Date();
+        return this.#proyectos.filter(p => {
+            const fechaFin = p.getFechaFin();
+            return !fechaFin || fechaFin > hoy;
+        });
     }
 }

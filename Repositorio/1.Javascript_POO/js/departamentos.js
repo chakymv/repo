@@ -1,4 +1,49 @@
-// Clase GestorDepartamentos - Para manejar colecciones de departamentos
+class Departamento {
+    #id;
+    #nombre;
+    #miembros;
+
+    constructor(id, nombre) {
+        this.#id = id;
+        this.#nombre = nombre;
+        this.#miembros = [];
+    }
+
+    getId() {
+        return this.#id;
+    }
+
+    getNombre() {
+        return this.#nombre;
+    }
+
+    setNombre(nuevoNombre) {
+        this.#nombre = nuevoNombre;
+    }
+
+    agregarMiembro(persona) {
+        if (!persona || !persona.getCodigo) return false;
+        if (this.#miembros.some(m => m.getCodigo() === persona.getCodigo())) return false;
+        this.#miembros.push(persona);
+        return true;
+    }
+
+    eliminarMiembro(codigoPersona) {
+        const idx = this.#miembros.findIndex(m => m.getCodigo() === codigoPersona);
+        if (idx === -1) return false;
+        this.#miembros.splice(idx, 1);
+        return true;
+    }
+
+    getMiembros() {
+        return [...this.#miembros];
+    }
+
+    contarMiembros() {
+        return this.#miembros.length;
+    }
+}
+
 class GestorDepartamentos {
     #departamentos;
 
