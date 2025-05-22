@@ -1,109 +1,69 @@
-// Clase GestorProyectos - Para manejar colecciones de proyectos
-class GestorProyectos {
-    #proyectos; // Colección de proyectos (Array)
+document.addEventListener('DOMContentLoaded', () => {
+   
+    gestorProyectos.cargarDesdeLocalStorage();
+    mostrarProyectos();
 
-    constructor() {
-        this.#proyectos = []; // Inicializamos un array vacío
-    }
+  
+    document.getElementById('proyecto-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const id = document.getElementById('proyecto-id').value;
+        const nombre = document.getElementById('proyecto-nombre').value;
+        const fechaInicio = new Date(document.getElementById('proyecto-fecha-inicio').value);
+        const fechaFin = document.getElementById('proyecto-fecha-fin').value ? new Date(document.getElementById('proyecto-fecha-fin').value) : null;
 
-    /**
-     * Agrega un proyecto a la colección
-     * @param {Proyecto} proyecto - Objeto de tipo Proyecto a agregar
-     * @returns {boolean} - Resultado de la operación
-     */
-    agregarProyecto(proyecto) {
-        // Verificamos que sea una instancia de Proyecto
-        if (!(proyecto instanceof Proyecto)) {
-            console.error("Error: Se esperaba un objeto de tipo Proyecto");
-            return false;
+        const nuevoProyecto = new Proyecto(id, nombre, fechaInicio, fechaFin);
+        if (gestorProyectos.agregarProyecto(nuevoProyecto)) {
+            alert('Proyecto agregado correctamente');
+            gestorProyectos.guardarEnLocalStorage();
+            mostrarProyectos();
+        } else {
+            alert('Error: No se pudo agregar el proyecto. El ID podría estar duplicado.');
         }
+    });
 
-        // Verificamos que no exista ya un proyecto con el mismo ID
-        if (this.buscarPorId(proyecto.getId())) {
-            console.error(`Error: Ya existe un proyecto con el ID ${proyecto.getId()}`);
-            return false;
+    document.getElementById('edit-proyecto-form').addEventListener('submit', (event) => {
+        event.preventDefault();
+        const id = document.getElementById('edit-proyecto-id').value;
+        const proyecto = gestorProyectos.buscarPorId(id);
+        if (proyecto) {
+            proyecto.setNombre(document.getElementById('edit-proyecto-nombre').value);
+            proyecto.setFechaInicio(new Date(document.getElementById('edit-proyecto-fecha-inicio').value));
+            proyecto.setFechaFin(document.getElementById('edit-proyecto-fecha-fin').value ? new Date(document.getElementById('edit-proyecto-fecha-fin').value) : null);
+            alert('Proyecto actualizado correctamente');
+            gestorProyectos.guardarEnLocalStorage();
+            mostrarProyectos();
+        } else {
+            alert('Error: Proyecto no encontrado.');
         }
+    });
 
-        // Agregamos el proyecto al array
-        this.#proyectos.push(proyecto);
-        return true;
-    }
 
-    /**
-     * Elimina un proyecto de la colección por su ID
-     * @param {string} id - ID del proyecto a eliminar
-     * @returns {boolean} - Resultado de la operación
-     */
-    eliminarProyecto(id) {
-        const indice = this.#proyectos.findIndex(p => p.getId() === id);
-        
-        if (indice === -1) {
-            console.error(`Error: No se encontró ningún proyecto con el ID ${id}`);
-            return false;
+    document.getElementById('delete-proyecto').addEventListener('click', () => {
+        const id = document.getElementById('edit-proyecto-id').value;
+        if (gestorProyectos.eliminarProyecto(id)) {
+            alert('Proyecto eliminado correctamente');
+            gestorProyectos.guardarEnLocalStorage();
+            mostrarProyectos();
+        } else {
+            alert('Error: No se pudo eliminar el proyecto.');
         }
-        
-        this.#proyectos.splice(indice, 1);
-        return true;
-    }
+    });
+});
 
-    /**
-     * Busca un proyecto por su ID
-     * @param {string} id - ID del proyecto a buscar
-     * @returns {Proyecto|null} - El proyecto encontrado o null
-     */
-    buscarPorId(id) {
-        return this.#proyectos.find(p => p.getId() === id) || null;
-    }
+function mostrarProyectos() {   
+    const proyectos = gestorProyectos.listarProyectos();
+    const listaProyectos = document.getElementById('lista-proyectos');
+    listaProyectos.innerHTML = ''; // Clear the list before displaying
 
-    /**
-     * Busca proyectos por su nombre (parcial o completo)
-     * @param {string} nombre - Nombre a buscar
-     * @returns {Array<Proyecto>} - Array con los proyectos que coinciden
-     */
-    buscarPorNombre(nombre) {
-        const nombreLower = nombre.toLowerCase();
-        return this.#proyectos.filter(p => 
-            p.getNombre().toLowerCase().includes(nombreLower)
-        );
-    }
-
-    /**
-     * Obtiene todos los proyectos de la colección
-     * @returns {Array<Proyecto>} - Copia del array de proyectos
-     */
-    obtenerTodos() {
-        return [...this.#proyectos]; // Devolvemos una copia para evitar modificaciones directas
-    }
-
-    /**
-     * Cuenta el número de proyectos en la colección
-     * @returns {number} - Cantidad de proyectos
-     */
-    contarProyectos() {
-        return this.#proyectos.length;
-    }
-
-    /**
-     * Busca proyectos en los que participa una persona específica
-     * @param {string} codigoPersona - Código de la persona
-     * @returns {Array<Proyecto>} - Proyectos en los que participa la persona
-     */
-    buscarProyectosPorParticipante(codigoPersona) {
-        return this.#proyectos.filter(proyecto => {
-            const participantes = proyecto.getParticipantes();
-            return participantes.some(p => p.persona.getCodigo() === codigoPersona);
+    proyectos.forEach(proyecto => {
+        const li = document.createElement('li');
+        li.textContent = `ID: ${proyecto.getId()}, Nombre: ${proyecto.getNombre()}, Fecha Inicio: ${proyecto.getFechaInicio().toLocaleDateString()}, Fecha Fin: ${proyecto.getFechaFin() ? proyecto.getFechaFin().toLocaleDateString() : 'N/A'}`;
+        li.addEventListener('click', () => {
+            document.getElementById('edit-proyecto-id').value = proyecto.getId();
+            document.getElementById('edit-proyecto-nombre').value = proyecto.getNombre();
+            document.getElementById('edit-proyecto-fecha-inicio').value = proyecto.getFechaInicio().toISOString().split('T')[0];
+            document.getElementById('edit-proyecto-fecha-fin').value = proyecto.getFechaFin() ? proyecto.getFechaFin().toISOString().split('T')[0] : '';
         });
-    }
-
-    /**
-     * Busca proyectos activos (sin fecha de fin o con fecha de fin posterior a hoy)
-     * @returns {Array<Proyecto>} - Proyectos activos
-     */
-    obtenerProyectosActivos() {
-        const hoy = new Date();
-        return this.#proyectos.filter(p => {
-            const fechaFin = p.getFechaFin();
-            return !fechaFin || fechaFin > hoy;
-        });
-    }
+        listaProyectos.appendChild(li);
+    });
 }

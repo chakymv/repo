@@ -1,98 +1,428 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-     <link rel="stylesheet" href="css/styles.css">
-    <title>Document</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Gestor de Proyectos</title>
+  <link rel="stylesheet" href="css/styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
+
 <body>
-  
   <header>
-        <h1>Sistema de Gestión</h1>
-    </header>
-    <main>        
-        <section class="section-container proyectos-section"> <!-- Añadida clase proyectos-section para claridad y envuelve todo -->
-            <h1>Gestor de Proyectos</h1>
-            <p>Bienvenido al gestor de proyectos.</p>
+    <h1>Sistema de Gestión</h1>
+  </header>
+  <main>
+    <section class="section-container proyectos-section">
+      <h1>Gestor de Proyectos</h1>
+      <p>Bienvenido al gestor de proyectos.</p>
+      <div class="proyectos-tabs tabs">
+        <div class="tab active" data-tab="view-proyectos">Ver Proyectos</div>
+        <div class="tab" data-tab="create-proyecto">Crear Proyecto</div>
+        <div class="tab" data-tab="edit-proyecto">Editar Proyecto</div>
+      </div>
 
-            <div class="proyectos-tabs tabs"> <!-- Contenedor para los botones de las pestañas, similar a index.html -->
-                <div class="tab active" data-tab="view-proyectos">Ver Proyectos</div>
-                <div class="tab" data-tab="create-proyecto">Crear Proyecto</div>
-                <div class="tab" data-tab="edit-proyecto">Editar Proyecto</div>
-            </div>
+      <div class="proyectos-content">
+        
+        <div id="view-proyectos" class="tab-content active">
+          <h2>Lista de Proyectos</h2>
+          <table id="proyectos-table">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Nombre</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Participantes</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody id="proyectos-list">
+            
+            </tbody>
+          </table>
+        </div>
 
-            <div class="proyectos-content"> <!-- Contenedor para el contenido de las pestañas -->
-                <!-- Tabla para visualizar proyectos -->
-                <div id="view-proyectos" class="tab-content active">
-                    <h2>Lista de Proyectos</h2>
-                    <table id="proyectos-table">
-                        <thead>
-                            <tr>
-                                <th>ID</th>
-                                <th>Nombre</th>
-                                <th>Fecha Inicio</th>
-                                <th>Fecha Fin</th>
-                                <th>Participantes</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody id="proyectos-list">
-                            <!-- Se llenará dinámicamente -->
-                        </tbody>
-                    </table>
-                </div>
-
-                <!-- Formulario para crear proyectos -->
-                <div id="create-proyecto" class="tab-content">
-                    <h2>Crear Nuevo Proyecto</h2>
-                    <form id="proyecto-form">
-                        <label for="id">ID:</label>
-                        <input type="text" id="id" required>
-
-                        <label for="nombre">Nombre:</label>
-                        <input type="text" id="nombre" required>
-
-                        <label for="fechaInicio">Fecha Inicio:</label>
-                        <input type="date" id="fechaInicio" required>
-
-                        <label for="fechaFin">Fecha Fin:</label>
-                        <input type="date" id="fechaFin">
-
-                        <button type="submit">Guardar Proyecto</button>
-                    </form>
-                </div>
-
-                <!-- Formulario para editar proyectos -->
-                <div id="edit-proyecto" class="tab-content">
-                    <h2>Editar Proyecto</h2>
-                    <select id="proyecto-select">
-                        <option value="">Seleccione un proyecto...</option>
-                    </select>
-
-                    <form id="edit-proyecto-form" style="display: none;"> <!-- Ocultar inicialmente hasta que se seleccione un proyecto -->
-                        <label for="edit-id">ID:</label>
-                        <input type="text" id="edit-id" readonly>
-
-                        <label for="edit-nombre">Nombre:</label>
-                        <input type="text" id="edit-nombre" required>
-
-                        <label for="edit-fechaInicio">Fecha Inicio:</label>
-                        <input type="date" id="edit-fechaInicio" required>
-
-                        <label for="edit-fechaFin">Fecha Fin:</label>
-                        <input type="date" id="edit-fechaFin">
-
-                        <button type="submit">Actualizar Proyecto</button>
-                        <button type="button" id="delete-proyecto">Eliminar Proyecto</button>
-                    </form>
-                </div>
-            </div> <!-- Cierre de .proyectos-content -->
-        </section> <!-- Cierre de .proyectos-section -->
-  
    
-    <script src="js/Proyecto.js"></script>
-     <script src="js/control.js"></script>
+        <div id="create-proyecto" class="tab-content">
+          <h2>Crear Nuevo Proyecto</h2>
+          <form id="proyecto-form">
+            <div class="form-group">
+              <label for="proyecto-id">ID:</label>
+              <input type="text" id="proyecto-id" maxlength="20" required />
+            </div>
+            <div class="form-group">
+              <label for="proyecto-nombre">Nombre:</label>
+              <input type="text" id="proyecto-nombre" maxlength="100" required />
+            </div>
+            <div class="form-group">
+              <label for="proyecto-fecha-inicio">Fecha Inicio:</label>
+              <input type="date" id="proyecto-fecha-inicio" required />
+            </div>
+            <div class="form-group">
+              <label for="proyecto-fecha-fin">Fecha Fin:</label>
+              <input type="date" id="proyecto-fecha-fin" />
+            </div>
+            <button type="submit">Guardar Proyecto</button>
+          </form>
+        </div>
+
+   
+        <div id="edit-proyecto" class="tab-content">
+          <h2>Editar Proyecto</h2>
+          <select id="proyecto-select">
+            <option value="">Seleccione un proyecto...</option>
+          </select>
+
+          <form id="edit-proyecto-form" style="display:none;">
+            <div class="form-group">
+              <label for="edit-proyecto-id">ID:</label>
+              <input type="text" id="edit-proyecto-id" readonly />
+            </div>
+            <div class="form-group">
+              <label for="edit-proyecto-nombre">Nombre:</label>
+              <input type="text" id="edit-proyecto-nombre" maxlength="100" required />
+            </div>
+            <div class="form-group">
+              <label for="edit-proyecto-fecha-inicio">Fecha Inicio:</label>
+              <input type="date" id="edit-proyecto-fecha-inicio" required />
+            </div>
+            <div class="form-group">
+              <label for="edit-proyecto-fecha-fin">Fecha Fin:</label>
+              <input type="date" id="edit-proyecto-fecha-fin" />
+            </div>
+            <button type="submit">Actualizar Proyecto</button>
+            <button type="button" id="delete-proyecto">Eliminar Proyecto</button>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <script>
+   
+    class Proyecto {
+      #id;
+      #nombre;
+      #fechaInicio;
+      #fechaFin;
+
+      constructor(id, nombre, fechaInicio, fechaFin = null) {
+        this.#id = id;
+        this.#nombre = nombre;
+        this.#fechaInicio = fechaInicio;
+        this.#fechaFin = fechaFin;
+      }
+
+      getId() {
+        return this.#id;
+      }
+      getNombre() {
+        return this.#nombre;
+      }
+      setNombre(nombre) {
+        this.#nombre = nombre;
+      }
+      getFechaInicio() {
+        return this.#fechaInicio;
+      }
+      setFechaInicio(fecha) {
+        this.#fechaInicio = fecha;
+      }
+      getFechaFin() {
+        return this.#fechaFin;
+      }
+      setFechaFin(fecha) {
+        this.#fechaFin = fecha;
+      }
+
+      toJSON() {
+        return {
+          id: this.#id,
+          nombre: this.#nombre,
+          fechaInicio: this.#fechaInicio.toISOString(),
+          fechaFin: this.#fechaFin ? this.#fechaFin.toISOString() : null
+        };
+      }
+    }
+
+
+    class GestorProyectos {
+      #proyectos;
+
+      constructor() {
+        this.#proyectos = [];
+      }
+
+      agregarProyecto(proyecto) {
+        if (!(proyecto instanceof Proyecto)) {
+          console.error("Se esperaba un objeto de tipo Proyecto");
+          return false;
+        }
+        if (this.buscarPorId(proyecto.getId())) {
+          console.error("Ya existe un proyecto con el mismo ID");
+          return false;
+        }
+        this.#proyectos.push(proyecto);
+        return true;
+      }
+
+      eliminarProyecto(id) {
+        const idx = this.#proyectos.findIndex(p => p.getId() === id);
+        if (idx === -1) {
+          console.error("No se encontró proyecto con ID: " + id);
+          return false;
+        }
+        this.#proyectos.splice(idx, 1);
+        return true;
+      }
+
+      buscarPorId(id) {
+        return this.#proyectos.find(p => p.getId() === id) || null;
+      }
+
+      obtenerTodos() {
+        return [...this.#proyectos];
+      }
+
+      guardarEnLocalStorage() {
+        const pData = this.#proyectos.map(p => p.toJSON());
+        localStorage.setItem('proyectos', JSON.stringify(pData));
+      }
+
+      cargarDesdeLocalStorage() {
+        const data = localStorage.getItem('proyectos');
+        if (data) {
+          const arr = JSON.parse(data);
+          this.#proyectos = arr.map(obj => new Proyecto(
+            obj.id,
+            obj.nombre,
+            new Date(obj.fechaInicio),
+            obj.fechaFin ? new Date(obj.fechaFin) : null
+          ));
+        }
+      }
+    }
+
     
+    const gestorProyectos = new GestorProyectos();
+
+  
+    document.querySelectorAll('.tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        tab.classList.add('active');
+        const tid = tab.dataset.tab;
+        document.getElementById(tid).classList.add('active');
+
+        if (tid === 'edit-proyecto') {
+          toggleEditFormVisibility(document.getElementById('proyecto-select').value);
+        }
+      });
+    });
+
+   
+    function toggleEditFormVisibility(selectedId) {
+      const form = document.getElementById('edit-proyecto-form');
+      if (selectedId) {
+        form.style.display = 'block';
+        cargarProyectoParaEditar(selectedId);
+      } else {
+        form.style.display = 'none';
+        form.reset();
+      }
+    }
+
+ 
+    function mostrarProyectos() {
+      const tbody = document.getElementById('proyectos-list');
+      tbody.innerHTML = '';
+      const proyectos = gestorProyectos.obtenerTodos();
+
+      if (proyectos.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = '<td colspan="6" style="text-align:center; font-style:italic; color:#888;">No hay proyectos registrados</td>';
+        tbody.appendChild(row);
+        return;
+      }
+
+      proyectos.forEach(proyecto => {
+        const tr = document.createElement('tr');
+
+        function formatDate(d) {
+          if (!d) return 'En curso';
+          if (!(d instanceof Date)) return 'Fecha inválida';
+          const dd = d.getDate().toString().padStart(2, '0');
+          const mm = (d.getMonth() + 1).toString().padStart(2, '0');
+          const yyyy = d.getFullYear();
+          return `${dd}/${mm}/${yyyy}`;
+        }
+
+        tr.innerHTML = `
+            <td>${proyecto.getId()}</td>
+            <td>${proyecto.getNombre()}</td>
+            <td>${formatDate(proyecto.getFechaInicio())}</td>
+            <td>${formatDate(proyecto.getFechaFin())}</td>
+            <td>0 participante(s)</td>
+            <td>
+                <button class="btn-edit" data-id="${proyecto.getId()}">Editar</button>
+                <button class="btn-delete" data-id="${proyecto.getId()}">Eliminar</button>
+            </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+     
+      document.querySelectorAll('.btn-edit').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.id;
+          
+          document.querySelector('.tab[data-tab="edit-proyecto"]').click();
+          document.getElementById('proyecto-select').value = id;
+          toggleEditFormVisibility(id);
+        };
+      });
+
+      document.querySelectorAll('.btn-delete').forEach(btn => {
+        btn.onclick = () => {
+          const id = btn.dataset.id;
+          if (confirm('¿Seguro que desea eliminar el proyecto?')) {
+            if (gestorProyectos.eliminarProyecto(id)) {
+              alert('Proyecto eliminado correctamente.');
+              gestorProyectos.guardarEnLocalStorage();
+              actualizarSelectsProyectos();
+              mostrarProyectos();
+            } else {
+              alert('Error al eliminar proyecto.');
+            }
+          }
+        };
+      });
+    }
+
+    // Update project selects
+    function actualizarSelectsProyectos() {
+      const select = document.getElementById('proyecto-select');
+      select.innerHTML = '<option value="">Seleccione un proyecto...</option>';
+      gestorProyectos.obtenerTodos().forEach(p => {
+        const option = document.createElement('option');
+        option.value = p.getId();
+        option.textContent = `${p.getId()} - ${p.getNombre()}`;
+        select.appendChild(option);
+      });
+    }
+
+
+    function cargarProyectoParaEditar(id) {
+      const p = gestorProyectos.buscarPorId(id);
+      if (!p) return;
+
+      document.getElementById('edit-proyecto-id').value = p.getId();
+      document.getElementById('edit-proyecto-nombre').value = p.getNombre();
+
+      let fi = p.getFechaInicio();
+      document.getElementById('edit-proyecto-fecha-inicio').value = fi instanceof Date ? fi.toISOString().slice(0, 10) : '';
+
+      let ff = p.getFechaFin();
+      document.getElementById('edit-proyecto-fecha-fin').value = ff instanceof Date ? ff.toISOString().slice(0, 10) : '';
+    }
+
+
+    document.addEventListener('DOMContentLoaded', () => {
+
+      gestorProyectos.cargarDesdeLocalStorage();
+
+
+      mostrarProyectos();
+      actualizarSelectsProyectos();
+
+
+      document.getElementById('proyecto-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const id = document.getElementById('proyecto-id').value.trim();
+        const nombre = document.getElementById('proyecto-nombre').value.trim();
+        const fiVal = document.getElementById('proyecto-fecha-inicio').value;
+        const ffVal = document.getElementById('proyecto-fecha-fin').value;
+
+        if (!id || !nombre || !fiVal) {
+          alert('Por favor, complete los campos obligatorios.');
+          return;
+        }
+
+        const fi = new Date(fiVal);
+        const ff = ffVal ? new Date(ffVal) : null;
+
+        const p = new Proyecto(id, nombre, fi, ff);
+        if (gestorProyectos.agregarProyecto(p)) {
+          alert('Proyecto creado correctamente.');
+          gestorProyectos.guardarEnLocalStorage();
+          mostrarProyectos();
+          actualizarSelectsProyectos();
+          e.target.reset();
+
+          document.querySelector('.tab[data-tab="view-proyectos"]').click();
+        } else {
+          alert('Error: Ya existe un proyecto con ese ID.');
+        }
+      });
+
+
+      document.getElementById('proyecto-select').addEventListener('change', e => {
+        toggleEditFormVisibility(e.target.value);
+      });
+
+
+      document.getElementById('edit-proyecto-form').addEventListener('submit', e => {
+        e.preventDefault();
+        const id = document.getElementById('edit-proyecto-id').value;
+        const nombre = document.getElementById('edit-proyecto-nombre').value.trim();
+        const fiVal = document.getElementById('edit-proyecto-fecha-inicio').value;
+        const ffVal = document.getElementById('edit-proyecto-fecha-fin').value;
+
+        if (!nombre || !fiVal) {
+          alert('Por favor, complete los campos obligatorios.');
+          return;
+        }
+
+        const proyecto = gestorProyectos.buscarPorId(id);
+        if (!proyecto) {
+          alert('Proyecto no encontrado.');
+          return;
+        }
+
+        proyecto.setNombre(nombre);
+        proyecto.setFechaInicio(new Date(fiVal));
+        proyecto.setFechaFin(ffVal ? new Date(ffVal) : null);
+
+        alert('Proyecto actualizado correctamente.');
+        gestorProyectos.guardarEnLocalStorage();
+        mostrarProyectos();
+        actualizarSelectsProyectos();
+
+        document.querySelector('.tab[data-tab="view-proyectos"]').click();
+      });
+
+
+      document.getElementById('delete-proyecto').addEventListener('click', () => {
+        const id = document.getElementById('edit-proyecto-id').value;
+        if (!id) return;
+        if (confirm('¿Está seguro que desea eliminar el proyecto?')) {
+          if (gestorProyectos.eliminarProyecto(id)) {
+            alert('Proyecto eliminado correctamente.');
+            gestorProyectos.guardarEnLocalStorage();
+            mostrarProyectos();
+            actualizarSelectsProyectos();
+
+            document.querySelector('.tab[data-tab="view-proyectos"]').click();
+          } else {
+            alert('Error al eliminar el proyecto.');
+          }
+        }
+      });
+    });
+  </script>
 </body>
+
 </html>

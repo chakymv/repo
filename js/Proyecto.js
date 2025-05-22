@@ -1,21 +1,16 @@
-
-// Clase Proyecto - Demuestra relación muchos a muchos con Persona
 class Proyecto {
     #id;
     #nombre;
     #fechaInicio;
     #fechaFin;
-    #participantes; // Relación muchos a muchos con Persona
 
     constructor(id, nombre, fechaInicio, fechaFin = null) {
         this.#id = id;
         this.#nombre = nombre;
-        this.#fechaInicio = fechaInicio;
-        this.#fechaFin = fechaFin;
-        this.#participantes = []; // Array de objetos {persona, rol}
+        this.#fechaInicio = fechaInicio instanceof Date ? fechaInicio : new Date(fechaInicio);
+        this.#fechaFin = fechaFin instanceof Date || fechaFin === null ? fechaFin : new Date(fechaFin);
     }
 
-    // Getters y setters básicos
     getId() {
         return this.#id;
     }
@@ -32,96 +27,29 @@ class Proyecto {
         return this.#fechaInicio;
     }
 
+    setFechaInicio(fechaInicio) {
+        this.#fechaInicio = fechaInicio instanceof Date ? fechaInicio : new Date(fechaInicio);
+    }
+
     getFechaFin() {
         return this.#fechaFin;
     }
 
     setFechaFin(fechaFin) {
-        this.#fechaFin = fechaFin;
-    }
-
-    // Métodos para la relación muchos a muchos
-    agregarParticipante(persona, rol) {
-        if (!(persona instanceof Persona)) {
-            console.error("Error: Se esperaba un objeto de tipo Persona");
-            return false;
+        if (fechaFin === null) {
+            this.#fechaFin = null;
+        } else {
+            this.#fechaFin = fechaFin instanceof Date ? fechaFin : new Date(fechaFin);
         }
-
-        // Verificar si ya existe el participante
-        if (this.#participantes.some(p => p.persona.getCodigo() === persona.getCodigo())) {
-            console.error(`La persona con código ${persona.getCodigo()} ya participa en este proyecto`);
-            return false;
-        }
-
-        // Agregar persona con su rol en el proyecto
-        this.#participantes.push({
-            persona: persona,
-            rol: rol
-        });
-        
-        return true;
     }
 
-    cambiarRolParticipante(codigoPersona, nuevoRol) {
-        const participante = this.#participantes.find(p => p.persona.getCodigo() === codigoPersona);
-        
-        if (!participante) {
-            console.error(`No se encontró ninguna persona con el código ${codigoPersona} en este proyecto`);
-            return false;
-        }
-        
-        participante.rol = nuevoRol;
-        return true;
-    }
-
-    eliminarParticipante(codigoPersona) {
-        const indice = this.#participantes.findIndex(p => p.persona.getCodigo() === codigoPersona);
-        
-        if (indice === -1) {
-            console.error(`No se encontró ninguna persona con el código ${codigoPersona} en este proyecto`);
-            return false;
-        }
-        
-        this.#participantes.splice(indice, 1);
-        return true;
-    }
-
-    getParticipantes() {
-        return [...this.#participantes]; // Devolvemos una copia
-    }
-
-    contarParticipantes() {
-        return this.#participantes.length;
-    }
-
-    obtenerParticipantesPorRol(rol) {
-        return this.#participantes
-            .filter(p => p.rol === rol)
-            .map(p => p.persona);
+    // This method allows JSON.stringify() to serialize the instance correctly
+    toJSON() {
+        return {
+            id: this.#id,
+            nombre: this.#nombre,
+            fechaInicio: this.#fechaInicio?.toISOString() ?? null,
+            fechaFin: this.#fechaFin?.toISOString() ?? null
+        };
     }
 }
-
-//Localstorage 
-
-document.addEventListener("DOMContentLoaded", () => {
-    setupTabs();
-    mostrarProyectos();
-
-    proyectoForm.addEventListener("submit", (event) => {
-        guardarProyecto(event);
-        gestorProyectos.guardarEnLocalStorage();
-    });
-
-    editProyectoForm.addEventListener("submit", (event) => {
-        actualizarProyecto(event);
-        gestorProyectos.guardarEnLocalStorage();
-    });
-
-    document.getElementById("delete-proyecto").addEventListener("click", () => {
-        const id = document.getElementById("edit-id").value;
-        if (id) {
-            eliminarProyecto(id);
-            gestorProyectos.guardarEnLocalStorage();
-        }
-    });
-});

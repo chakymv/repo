@@ -1,113 +1,135 @@
+:root {
+    --primary-green: #28a745;
+    --hover-green: #218838;
+    --light-bg: #f2f7ff; 
+    --border-color: #d1e0ea;
+    --text-color: #3f4a56;
+    --header-color: #1a202c;
+    --tab-inactive: #e9ecef;
+    --tab-hover: #dee2e6;
+}
+
 body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     margin: 0;
     padding: 20px;
-    background-color: #f9f9f9;
-    color: #333;
+    background-color: var(--light-bg); 
+    color: var(--text-color);
 }
 
 .section-container {
     margin-bottom: 30px;
     background-color: #fff;
-    border: 1px solid #e0e0e0;
+    border: 1px solid var(--border-color);
     padding: 25px;
-    border-radius: 8px;
-    box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
-}
-
-.form-group {
-    margin-bottom: 20px;
+    border-radius: 10px; 
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
 }
 
 label {
     display: block;
-    margin-bottom: 6px;
-    font-weight: 600;
-    color: #555;
+    margin-bottom: 8px;
+    font-weight: 700;
+    color: var(--header-color);
 }
 
 input, select {
     width: 100%;
-    padding: 10px;
-    border: 1px solid #ccc;
-    border-radius: 6px;
-    font-size: 14px;
-    transition: border-color 0.3s ease;
+    padding: 12px;
+    border: 1px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 15px;
+    transition: border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
 input:focus, select:focus {
-    border-color: #4CAF50;
+    border-color: var(--primary-green);
     outline: none;
+    box-shadow: 0 0 0 3px rgba(40, 167, 69, 0.2);
 }
 
 button {
-    padding: 10px 18px;
-    background-color: #4CAF50;
+    padding: 12px 22px;
+    background-color: var(--primary-green);
     color: white;
     border: none;
-    border-radius: 6px;
+    border-radius: 8px;
     cursor: pointer;
     font-weight: 600;
-    transition: background-color 0.3s ease;
+    transition: background-color 0.3s ease, transform 0.2s ease;
+    display: inline-flex; 
+    align-items: center;
+    gap: 8px; 
 }
 
 button:hover {
-    background-color: #43a047;
+    background-color: var(--hover-green);
+    transform: translateY(-2px); 
+}
+
+
+button i {
+    font-size: 16px;
 }
 
 table {
     width: 100%;
     border-collapse: collapse;
     background-color: #fff;
-    border-radius: 6px;
+    border-radius: 8px;
     overflow: hidden;
-    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.08); 
 }
 
 th, td {
-    border: 1px solid #e0e0e0;
-    padding: 12px;
+    border: 1px solid var(--border-color);
+    padding: 14px; 
     text-align: left;
-    font-size: 14px;
+    font-size: 14.5px;
 }
 
 th {
-    background-color: #f5f5f5;
-    font-weight: 600;
+    background-color: var(--tab-inactive);
+    font-weight: 700;
+    color: var(--header-color);
 }
 
 .action-buttons {
-    margin-top: 20px;
+    margin-top: 25px; 
+    display: flex; 
+    gap: 15px; 
 }
 
 .tabs {
     display: flex;
-    margin-bottom: 20px;
-    border-bottom: 2px solid #e0e0e0;
+    margin-bottom: 25px; 
+    border-bottom: 2px solid var(--border-color);
 }
 
 .tab {
-    padding: 12px 20px;
+    padding: 14px 22px; 
     cursor: pointer;
-    background-color: #f5f5f5;
-    margin-right: 5px;
-    border-radius: 6px 6px 0 0;
-    transition: background-color 0.3s ease;
+    background-color: var(--tab-inactive);
+    margin-right: 6px;
+    border-radius: 8px 8px 0 0; 
+    transition: background-color 0.3s ease, color 0.3s ease;
+    font-weight: 600;
+    color: var(--text-color);
 }
 
 .tab:hover {
-    background-color: #e0e0e0;
+    background-color: var(--tab-hover);
 }
 
 .tab.active {
-    background-color: #4CAF50;
+    background-color: var(--primary-green);
     color: white;
     font-weight: bold;
 }
 
 .tab-content {
     display: none;
-    animation: fadeIn 0.3s ease-in-out;
+    animation: fadeIn 0.4s ease-in-out; 
 }
 
 .tab-content.active {
@@ -115,6 +137,6 @@ th {
 }
 
 @keyframes fadeIn {
-    from { opacity: 0; }
-    to { opacity: 1; }
+    from { opacity: 0; transform: translateY(10px); } /* Animación con movimiento */
+    to { opacity: 1; transform: translateY(0); }
 }
