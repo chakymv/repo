@@ -49,11 +49,11 @@
                     <h2>Agregar Departamento</h2>
                     <form id="departamento-form">
                         <div class="form-group">
-                            <!-- Consider using consistent class names like 'form-group' if used elsewhere -->
+                           
                             <label for="id-departamento">ID:</label>
                             <input type="text" id="id-departamento" required>
                         </div>
-                        <div class="form-group"> <!-- Consider using consistent class names -->
+                        <div class="form-group">
                             <label for="nombre-departamento">Nombre:</label>
                             <input type="text" id="nombre-departamento" required>
                         </div>
@@ -132,18 +132,18 @@
     <script src="js/GestorDepartamentos.js" defer></script>
     <script src="js/controlDepartamentos.js" defer></script>
     <script>
-        // Script para tabs (puedes moverlo a un archivo aparte si prefieres, e.g., into controlDepartamentos.js or a general ui.js)
+        
         document.addEventListener('DOMContentLoaded', function () {
             const tabButtons = document.querySelectorAll('.departamentos-tabs .tab[data-tab]');
             const tabContents = document.querySelectorAll('.departamentos-content .tab-content');
 
             tabButtons.forEach(tabButton => {
                 tabButton.addEventListener('click', () => {
-                    // Deactivate all tabs and content
+                   
                     tabButtons.forEach(t => t.classList.remove('active'));
                     tabContents.forEach(content => content.classList.remove('active'));
 
-                    // Activate clicked tab and corresponding content
+                   
                     tabButton.classList.add('active');
                     const targetContentId = tabButton.dataset.tab;
                     const targetContent = document.getElementById(targetContentId);

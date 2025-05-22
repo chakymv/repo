@@ -53,8 +53,7 @@ document.addEventListener('DOMContentLoaded', () => {
 function mostrarProyectos() {   
     const proyectos = gestorProyectos.listarProyectos();
     const listaProyectos = document.getElementById('lista-proyectos');
-    listaProyectos.innerHTML = ''; // Clear the list before displaying
-
+    listaProyectos.innerHTML = ''; 
     proyectos.forEach(proyecto => {
         const li = document.createElement('li');
         li.textContent = `ID: ${proyecto.getId()}, Nombre: ${proyecto.getNombre()}, Fecha Inicio: ${proyecto.getFechaInicio().toLocaleDateString()}, Fecha Fin: ${proyecto.getFechaFin() ? proyecto.getFechaFin().toLocaleDateString() : 'N/A'}`;
