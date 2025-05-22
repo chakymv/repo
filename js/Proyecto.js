@@ -43,7 +43,7 @@ class Proyecto {
         }
     }
 
-    // This method allows JSON.stringify() to serialize the instance correctly
+
     toJSON() {
         return {
             id: this.#id,
